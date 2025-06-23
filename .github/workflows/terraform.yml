@@ -1,0 +1,41 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.7
+        
+    - name: Load environment variables
+      run: |
+        if [ -f .env ]; then
+          export $(cat .env | xargs)
+        fi
+        
+    - name: Configure AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ env.ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ env.SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: eu-west-2
+      run: |
+        echo "AWS credentials configured from .env file"
+        
+    - name: Terraform Init
+      run: terraform init
+      
+    - name: Terraform Plan
+      run: terraform plan
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
