@@ -2,7 +2,7 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: [ deploy ]
+    branches: [ main ]
 
 jobs:
   terraform:

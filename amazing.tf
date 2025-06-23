@@ -13,13 +13,13 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "alex_bucket" {
-#   bucket = "alex-bucket-${random_id.suffix.hex}"
-    bucket = "alex-bucket-2025-06-23"
+   bucket = "alex-bucket-${random_id.suffix.hex}"
+
 }
 
-# resource "random_id" "suffix" {
-#   byte_length = 4
-# }
+resource "random_id" "suffix" {
+  byte_length = 4
+}
 
 resource "aws_s3_bucket_website_configuration" "alex_bucket" {
   bucket = aws_s3_bucket.alex_bucket.id
